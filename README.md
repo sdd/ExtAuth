@@ -38,10 +38,12 @@ ExtAuth is installed the same way as any other CakePHP 2.x plugin. Simply copy t
 	5. Create two lines in your app's Config/core.php file (or elsewhere if you have another location for app settings)
 		similar to the following:
 
+			```php
 			Configure::write('ExtAuth.Provider.Google.key', '123456789012.apps.googleusercontent.com');
 			Configure::write('ExtAuth.Provider.Google.secret', 'blahblahblahblahblahblah');
+			```
 
-	Replace the config values with the Client ID and Client secret for your project in the Google API console.
+		Replace the config values with the Client ID and Client secret for your project in the Google API console.
 
 	### Twitter ###
 
@@ -51,10 +53,12 @@ ExtAuth is installed the same way as any other CakePHP 2.x plugin. Simply copy t
 	3. Create two lines in your app's Config/core.php file (or elsewhere if you have another location for app settings)
 		similar to the following:
 
+			```php
 			Configure::write('ExtAuth.Provider.Twitter.key', 'blahblahblah');
 			Configure::write('ExtAuth.Provider.Twitter.secret', 'blahblahblahblahblahblah');
+			```
 
-	Replace the config values with the Consumer key and Consumer secret for your app on the Twitter apps Details tab.
+		Replace the config values with the Consumer key and Consumer secret for your app on the Twitter apps Details tab.
 	4. Make sure "Sign In With Twitter" is ticked in the settings for your app on Twitter.
 
 	### Facebook ###
@@ -65,8 +69,10 @@ ExtAuth is installed the same way as any other CakePHP 2.x plugin. Simply copy t
 	4. Create two lines in your app's Config/core.php file (or elsewhere if you have another location for app settings)
 		similar to the following:
 
+			```php
 			Configure::write('ExtAuth.Provider.Facebook.key', '431235136634241414');
 			Configure::write('ExtAuth.Provider.Facebook.secret', '12344g4f3241e4d2144');
+			```
 
 	Replace the config values with the App ID and App Secret for your app in Facebook.
 
@@ -74,11 +80,14 @@ ExtAuth is installed the same way as any other CakePHP 2.x plugin. Simply copy t
 
 Firstly, ensure that your User Controller is loading the ExtAuth component, as well as CakePHP's Auth component:
 
+	```php
 	public $components = array('ExtAuth', 'Auth', 'Session');
+	```
 
 You will need, at minimum, two actions in your User Controller. These will initiate the authentication and handle a callback from
 the provider. Something like this:
 
+	```php
 	public function auth_login($provider) {
 		$result = $this->ExtAuth->login($provider);
 		if ($result['success']) {
@@ -102,14 +111,18 @@ the provider. Something like this:
 			$this->redirect($this->Auth->loginAction);
 		}
 	}
+	```
 
 You will also need to create two routes in Config/routes.php, similar to the following:
 
+	```php
 	Router::connect('/auth_login/*', array( 'controller' => 'users', 'action' => 'auth_login'));
 	Router::connect('/auth_callback/*', array( 'controller' => 'users', 'action' => 'auth_callback'));
+	```
 
 That's it. I'll leave it to you to implement the __successfulExtAuth function, but, you might want something similar to this:
 
+	```php
 	private function __successfulExtAuth($incomingProfile, $accessToken) {
 
 		// search for profile
@@ -189,5 +202,6 @@ That's it. I'll leave it to you to implement the __successfulExtAuth function, b
 			$this->redirect($this->Auth->loginRedirect);
 		}
 	}
+	```
 
 
