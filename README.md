@@ -1,8 +1,8 @@
 # ExtAuth #
 
 Copyright © 2013 Scott Donnelly ( http://scott.donnel.ly )
-Licensed under The MIT License
-Redistributions of files must retain the above copyright notice.
+
+Licensed under The MIT License. Redistributions of files must retain the above copyright notice.
 
 ## Synopsis ##
 
