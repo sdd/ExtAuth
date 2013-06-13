@@ -1,0 +1,42 @@
+{
+    "name": "sc0ttyd/ExtAuth",
+    "type": "cakephp-plugin",
+    "description": "federated login / external authentication (via OAuth1 and OAuth2) Plugin for CakePHP",
+    "keywords": ["cakephp","oauth","auth","extauth"],
+    "homepage": "https://github.com/sc0ttyd/ExtAuth",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Scott Donnelly",
+            "homepage": "http://scott.donnel.ly"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "googlecode/OAuth",
+                "description": "Andy Smith's PHP OAuth Library",
+                "version": "1.0.1272",
+                "license": "MIT",
+                "authors": [
+                    {
+                        "name": "Andy Smith"
+                    }
+                ],
+                "source": {
+                    "url": "http://oauth.googlecode.com/svn/",
+                    "type": "svn",
+                    "reference": "code/php/"
+                },
+                "autoload": {
+                    "classmap": ["OAuth.php"]
+                    
+                }
+            }
+        }
+    ],
+    "require": {
+        "googlecode/OAuth": "1.0.1272"
+    }
+}
