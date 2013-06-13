@@ -1,5 +1,8 @@
 # ExtAuth #
 
+Copyright © 2013 Scott Donnelly ( http://scott.donnel.ly )
+
+Licensed under The MIT License. Redistributions of files must retain the above copyright notice.
 
 ## Synopsis ##
 
@@ -38,10 +41,12 @@ ExtAuth is installed the same way as any other CakePHP 2.x plugin. Simply copy t
 	5. Create two lines in your app's Config/core.php file (or elsewhere if you have another location for app settings)
 		similar to the following:
 
-			Configure::write('ExtAuth.Provider.Google.key', '123456789012.apps.googleusercontent.com');
-			Configure::write('ExtAuth.Provider.Google.secret', 'blahblahblahblahblahblah');
+		```php
+		Configure::write('ExtAuth.Provider.Google.key', '123456789012.apps.googleusercontent.com');
+		Configure::write('ExtAuth.Provider.Google.secret', 'blahblahblahblahblahblah');
+		```
 
-	Replace the config values with the Client ID and Client secret for your project in the Google API console.
+		Replace the config values with the Client ID and Client secret for your project in the Google API console.
 
 	### Twitter ###
 
@@ -51,10 +56,12 @@ ExtAuth is installed the same way as any other CakePHP 2.x plugin. Simply copy t
 	3. Create two lines in your app's Config/core.php file (or elsewhere if you have another location for app settings)
 		similar to the following:
 
-			Configure::write('ExtAuth.Provider.Twitter.key', 'blahblahblah');
-			Configure::write('ExtAuth.Provider.Twitter.secret', 'blahblahblahblahblahblah');
+		```php
+		Configure::write('ExtAuth.Provider.Twitter.key', 'blahblahblah');
+		Configure::write('ExtAuth.Provider.Twitter.secret', 'blahblahblahblahblahblah');
+		```
 
-	Replace the config values with the Consumer key and Consumer secret for your app on the Twitter apps Details tab.
+		Replace the config values with the Consumer key and Consumer secret for your app on the Twitter apps Details tab.
 	4. Make sure "Sign In With Twitter" is ticked in the settings for your app on Twitter.
 
 	### Facebook ###
@@ -65,129 +72,137 @@ ExtAuth is installed the same way as any other CakePHP 2.x plugin. Simply copy t
 	4. Create two lines in your app's Config/core.php file (or elsewhere if you have another location for app settings)
 		similar to the following:
 
-			Configure::write('ExtAuth.Provider.Facebook.key', '431235136634241414');
-			Configure::write('ExtAuth.Provider.Facebook.secret', '12344g4f3241e4d2144');
+		```php
+		Configure::write('ExtAuth.Provider.Facebook.key', '431235136634241414');
+		Configure::write('ExtAuth.Provider.Facebook.secret', '12344g4f3241e4d2144');
+		```
 
-	Replace the config values with the App ID and App Secret for your app in Facebook.
+		Replace the config values with the App ID and App Secret for your app in Facebook.
 
 ## Usage ##
 
 Firstly, ensure that your User Controller is loading the ExtAuth component, as well as CakePHP's Auth component:
 
-	public $components = array('ExtAuth', 'Auth', 'Session');
+```php
+public $components = array('ExtAuth', 'Auth', 'Session');
+```
 
 You will need, at minimum, two actions in your User Controller. These will initiate the authentication and handle a callback from
 the provider. Something like this:
 
-	public function auth_login($provider) {
-		$result = $this->ExtAuth->login($provider);
-		if ($result['success']) {
+```php
+public function auth_login($provider) {
+	$result = $this->ExtAuth->login($provider);
+	if ($result['success']) {
 
-			$this->redirect($result['redirectURL']);
+		$this->redirect($result['redirectURL']);
 
-		} else {
-			$this->Session->setFlash($result['message']);
-			$this->redirect($this->Auth->loginAction);
-		}
+	} else {
+		$this->Session->setFlash($result['message']);
+		$this->redirect($this->Auth->loginAction);
 	}
+}
 
-	public function auth_callback($provider) {
-		$result = $this->ExtAuth->loginCallback($provider);
-		if ($result['success']) {
+public function auth_callback($provider) {
+	$result = $this->ExtAuth->loginCallback($provider);
+	if ($result['success']) {
 
-			$this->__successfulExtAuth($result['profile'], $result['accessToken']);
+		$this->__successfulExtAuth($result['profile'], $result['accessToken']);
 
-		} else {
-			$this->Session->setFlash($result['message']);
-			$this->redirect($this->Auth->loginAction);
-		}
+	} else {
+		$this->Session->setFlash($result['message']);
+		$this->redirect($this->Auth->loginAction);
 	}
+}
+```
 
 You will also need to create two routes in Config/routes.php, similar to the following:
 
-	Router::connect('/auth_login/*', array( 'controller' => 'users', 'action' => 'auth_login'));
-	Router::connect('/auth_callback/*', array( 'controller' => 'users', 'action' => 'auth_callback'));
+```php
+Router::connect('/auth_login/*', array( 'controller' => 'users', 'action' => 'auth_login'));
+Router::connect('/auth_callback/*', array( 'controller' => 'users', 'action' => 'auth_callback'));
+```
 
 That's it. I'll leave it to you to implement the __successfulExtAuth function, but, you might want something similar to this:
 
-	private function __successfulExtAuth($incomingProfile, $accessToken) {
+```php
+private function __successfulExtAuth($incomingProfile, $accessToken) {
 
-		// search for profile
-		$this->SocialProfile->recursive = -1;
-		$existingProfile = $this->SocialProfile->find('first', array(
-			'conditions' => array('oid' => $incomingProfile['oid'])
+	// search for profile
+	$this->SocialProfile->recursive = -1;
+	$existingProfile = $this->SocialProfile->find('first', array(
+		'conditions' => array('oid' => $incomingProfile['oid'])
+	));
+
+	if ($existingProfile) {
+
+		// Existing profile? log the associated user in.
+		$user = $this->User->find('first', array(
+			'conditions' => array('id' => $existingProfile['SocialProfile']['user_id'])
 		));
 
-		if ($existingProfile) {
+		$this->__doAuthLogin($user);
+	} else {
 
-			// Existing profile? log the associated user in.
-			$user = $this->User->find('first', array(
-				'conditions' => array('id' => $existingProfile['SocialProfile']['user_id'])
-			));
+		// New profile.
+		if ($this->Auth->loggedIn()) {
 
-			$this->__doAuthLogin($user);
+			// user logged in already, attach profile to logged in user.
+
+			// create social profile linked to current user
+			$incomingProfile['user_id'] = $this->Auth->user('id');
+			$this->SocialProfile->save($incomingProfile);
+			$this->Session->setFlash('Your ' . $incomingProfile['provider'] . ' account has been linked.');
+			$this->redirect($this->Auth->loginRedirect);
+
 		} else {
 
-			// New profile.
-			if ($this->Auth->loggedIn()) {
+			// no-one logged in, must be a registration.
+			unset($incomingProfile['id']);
+			$user = $this->User->register(array('User' => $incomingProfile));
 
-				// user logged in already, attach profile to logged in user.
+			// create social profile linked to new user
+			$incomingProfile['user_id'] = $user['User']['id'];
+			$incomingProfile['last_login'] = date('Y-m-d h:i:s');
+			$incomingProfile['access_token'] = serialize($accessToken);
+			$this->SocialProfile->save($incomingProfile);
 
-				// create social profile linked to current user
-				$incomingProfile['user_id'] = $this->Auth->user('id');
-				$this->SocialProfile->save($incomingProfile);
-				$this->Session->setFlash('Your ' . $incomingProfile['provider'] . ' account has been linked.');
-				$this->redirect($this->Auth->loginRedirect);
+			// populate user detail fields that can be extracted
+			// from social profile
+			$profileData = array_intersect_key(
+				$incomingProfile,
+				array_flip(array(
+					'email',
+					'given_name',
+					'family_name',
+					'picture',
+					'gender',
+					'locale',
+					'birthday',
+					'raw'
+				))
+			);
 
-			} else {
+			$this->User->setupDetail();
+			$this->User->UserDetail->saveSection(
+				$user['User']['id'],
+				array('UserDetail' => $profileData),
+				'User'
+			);
 
-				// no-one logged in, must be a registration.
-				unset($incomingProfile['id']);
-				$user = $this->User->register(array('User' => $incomingProfile));
-
-				// create social profile linked to new user
-				$incomingProfile['user_id'] = $user['User']['id'];
-				$incomingProfile['last_login'] = date('Y-m-d h:i:s');
-				$incomingProfile['access_token'] = serialize($accessToken);
-				$this->SocialProfile->save($incomingProfile);
-
-				// populate user detail fields that can be extracted
-				// from social profile
-				$profileData = array_intersect_key(
-					$incomingProfile,
-					array_flip(array(
-						'email',
-						'given_name',
-						'family_name',
-						'picture',
-						'gender',
-						'locale',
-						'birthday',
-						'raw'
-					))
-				);
-
-				$this->User->setupDetail();
-				$this->User->UserDetail->saveSection(
-					$user['User']['id'],
-					array('UserDetail' => $profileData),
-					'User'
-				);
-
-				// log in
-				$this->__doAuthLogin($user);
-			}
+			// log in
+			$this->__doAuthLogin($user);
 		}
 	}
+}
 
-	private function __doAuthLogin($user) {
-		if ($this->Auth->login($user['User'])) {
-			$user['last_login'] = date('Y-m-d H:i:s');
-			$this->User->save(array('User' => $user));
+private function __doAuthLogin($user) {
+	if ($this->Auth->login($user['User'])) {
+		$user['last_login'] = date('Y-m-d H:i:s');
+		$this->User->save(array('User' => $user));
 
-			$this->Session->setFlash(sprintf(__d('users', '%s you have successfully logged in'), $this->Auth->user('username')));
-			$this->redirect($this->Auth->loginRedirect);
-		}
+		$this->Session->setFlash(sprintf(__d('users', '%s you have successfully logged in'), $this->Auth->user('username')));
+		$this->redirect($this->Auth->loginRedirect);
 	}
-
-
+}
+```
