@@ -31,12 +31,12 @@
                 },
                 "autoload": {
                     "classmap": ["OAuth.php"]
-                    
+
                 }
             }
         }
     ],
     "require": {
-        "googlecode/OAuth": "1.0.1272"
+        "googlecode/OAuth": "*"
     }
 }
