@@ -2,7 +2,7 @@
 
 Copyright © 2013 Scott Donnelly ( http://scott.donnel.ly )
 
-Licensed under The MIT License. Redistributions of files must retain the above copyright notice.
+Licensed under the MIT license. Redistributions of files must retain the above copyright notice.
 
 ## Synopsis ##
 
@@ -27,7 +27,7 @@ The recommended, easiest and quickest way to install ExtAuth is via Composer. To
 	```
 	Or, alternatively, follow the instructions at http://getcomposer.org/doc/00-intro.md#installation-nix
 3. If you don't have a composer.json file in app/ already, create one, with this as the contents:
-	```json
+	```javascript
 	{
 	    "name": "your app name",
 	    "repositories": [
@@ -49,7 +49,7 @@ The recommended, easiest and quickest way to install ExtAuth is via Composer. To
 	```bash
 	php composer.phar install
 	```
-	This should install ExtAuth to your app/Plugin folder, and it's dependancy, OAuth, to the app/Vendor folder.
+	This should install ExtAuth to your app/Plugin folder, and it's dependancy, EHER/OAuth, to the app/Vendor folder.
 
 5. At the top of your app/Config/bootstrap.php file, add the following:
 	```php
