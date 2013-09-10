@@ -31,13 +31,6 @@ The recommended, easiest and quickest way to install ExtAuth is via Composer. To
 3. If you don't have a composer.json file in app/ already, create one, with this as the contents:
 	```JSON
 		{
-			"name": "your app name",
-			"repositories": [
-				{
-					"type": "vcs",
-					"url": "https://github.com/sc0ttyd/ExtAuth"
-				}
-			],
 			"require": {
 				"sc0ttyd/ext-auth": "dev-master"
 			},
