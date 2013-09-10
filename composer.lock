@@ -1,0 +1,49 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "b3175435983049945a6be28366573e6b",
+    "packages": [
+        {
+            "name": "googlecode/OAuth",
+            "version": "1.0.1272",
+            "source": {
+                "type": "svn",
+                "url": "http://oauth.googlecode.com/svn/",
+                "reference": "code/php/"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "OAuth.php"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andy Smith"
+                }
+            ],
+            "description": "Andy Smith's PHP OAuth Library"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": [
+
+    ],
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}
