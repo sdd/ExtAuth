@@ -84,7 +84,7 @@ class OAuth1AuthMechanism extends OAuthAuthMechanism {
 		}
 	}
 
-	public function apiRequest($provider, $url, $token, $parameters = array(), $method = 'GET', $headers = array()) {
+	public function apiRequest($provider, $url, $token = null, $parameters = array(), $method = 'GET', $headers = array()) {
 		//TODO: headers
 
 		$consumer = new OAuthConsumer($provider->key, $provider->secret);
