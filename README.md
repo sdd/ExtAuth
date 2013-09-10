@@ -22,32 +22,34 @@ The recommended, easiest and quickest way to install ExtAuth is via Composer. To
 
 1. From terminal, change directory to the app/ directory.
 2. Install composer locally if you do not have it installed already. This can be done with the following command:
+
 	```bash
 	curl -sS https://getcomposer.org/installer | php
 	```
+	
 	Or, alternatively, follow the instructions at http://getcomposer.org/doc/00-intro.md#installation-nix
 3. If you don't have a composer.json file in app/ already, create one, with this as the contents:
-	```javascript
-	{
-	    "name": "your app name",
-	    "repositories": [
-	        {
-	            "type": "vcs",
-	            "url": "https://github.com/sc0ttyd/ExtAuth"
-	        }
-	    ],
-	    "require": {
-	        "sc0ttyd/ext-auth": "dev-master"
-	    },
-	    "config": {
-	        "vendor-dir": "Vendor/"
-	    }
-	}
+	```JSON
+		{
+			"name": "your app name",
+			"repositories": [
+				{
+					"type": "vcs",
+					"url": "https://github.com/sc0ttyd/ExtAuth"
+				}
+			],
+			"require": {
+				"sc0ttyd/ext-auth": "dev-master"
+			},
+			"config": {
+				"vendor-dir": "Vendor/"
+			}
+		}
 	```
 	If you already have a composer.json file, merge the above into it.
 4. run the following command:
 	```bash
-	php composer.phar install
+		php composer.phar install
 	```
 	This should install ExtAuth to your app/Plugin folder, and it's dependancy, EHER/OAuth, to the app/Vendor folder.
 
