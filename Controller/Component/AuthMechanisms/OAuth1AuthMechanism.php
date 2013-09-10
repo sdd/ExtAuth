@@ -36,7 +36,7 @@ class OAuth1AuthMechanism extends OAuthAuthMechanism {
 	}
 
 	public function getAccessToken($provider, $requestToken, $callbackURL = null) {
-		$parsed_params = OAuthUtil::parse_parameters($_SERVER['QUERY_STRING']);
+		$parsed_params = Eher\OAuth\Util::parse_parameters($_SERVER['QUERY_STRING']);
 
 		return $this->_getToken(
 			$provider,
@@ -66,7 +66,7 @@ class OAuth1AuthMechanism extends OAuthAuthMechanism {
 			if (isset($result['oauth_token']) && isset($result['oauth_token_secret'])) {
 				return array(
 					'success' => true,
-					'data'   => new OAuthToken($result['oauth_token'], $result['oauth_token_secret'])
+					'data'   => new Eher\OAuth\Token($result['oauth_token'], $result['oauth_token_secret'])
 				);
 			} else {
 				return array(
