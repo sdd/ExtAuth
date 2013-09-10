@@ -18,7 +18,49 @@ integrated into your own (or another plugin's) User Controller. An example of ho
 
 ## Installation ##
 
-ExtAuth is installed the same way as any other CakePHP 2.x plugin. Simply copy the ExtAuth folder to App/Plugin.
+The recommended, easiest and quickest way to install ExtAuth is via Composer. To install via Composer, use the following steps:
+
+1. From terminal, change directory to the app/ directory.
+2. Install composer locally if you do not have it installed already. This can be done with the following command:
+	```bash
+	curl -sS https://getcomposer.org/installer | php
+	```
+	Or, alternatively, follow the instructions at http://getcomposer.org/doc/00-intro.md#installation-nix
+3. If you don't have a composer.json file in app/ already, create one, with this as the contents:
+	```json
+	{
+	    "name": "your app name",
+	    "repositories": [
+	        {
+	            "type": "vcs",
+	            "url": "https://github.com/sc0ttyd/ExtAuth"
+	        }
+	    ],
+	    "require": {
+	        "sc0ttyd/ext-auth": "dev-master"
+	    },
+	    "config": {
+	        "vendor-dir": "Vendor/"
+	    }
+	}
+	```
+	If you already have a composer.json file, merge the above into it.
+4. run the following command:
+	```bash
+	php composer.phar install
+	```
+	This should install ExtAuth to your app/Plugin folder, and it's dependancy, OAuth, to the app/Vendor folder.
+
+5. At the top of your app/Config/bootstrap.php file, add the following:
+	```php
+	require APP . '/Vendor/autoload.php';
+	spl_autoload_unregister(array('App', 'load'));
+	spl_autoload_register(array('App', 'load'), true, true);
+	```
+	This will ensure that Cake can find all of the files we just installed. For more information on this, see http://mark-story.com/posts/view/installing-cakephp-with-composer and https://github.com/composer/composer/commit/c80cb76b9b5082ecc3e5b53b1050f76bb27b127b
+
+The above may look a bit daunting if you aren't used to Composer, but, trust me, it's worth becoming familiar with it, if you are not already. Composer makes things much easier once you are familiar with it. If you choose to install by the more traditional technique of copying the files in this repo to app/Plugin/ExtAuth (or doing the same with git submodules), you will need to make a clone of https://github.com/EHER/OAuth in the app/Vendor directory, and add App::Import() statements or 'require_once' statements to ExtAuth/Controller/Component/AuthMechanisms/OAuth1AuthMechanism.php so that Util, Token, Consumer, Request, and HmacSha1 get loaded.
+
 
 ## Configuration ##
 
