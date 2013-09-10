@@ -84,7 +84,7 @@ ExtAuth is installed the same way as any other CakePHP 2.x plugin. Simply copy t
 Firstly, ensure that your User Controller is loading the ExtAuth component, as well as CakePHP's Auth component:
 
 ```php
-public $components = array('ExtAuth', 'Auth', 'Session');
+public $components = array('ExtAuth.ExtAuth', 'Auth', 'Session');
 ```
 
 You will need, at minimum, two actions in your User Controller. These will initiate the authentication and handle a callback from
