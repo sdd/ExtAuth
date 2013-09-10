@@ -1,14 +1,17 @@
 {
-    "name": "sc0ttyd/ExtAuth",
+    "name": "sc0ttyd/ext-auth",
+    "description": "CakePHP federated login / external authentication (via OAuth1 and OAuth2) Plugin",
+    "version": "0.1.0",
     "type": "cakephp-plugin",
-    "description": "federated login / external authentication (via OAuth1 and OAuth2) Plugin for CakePHP",
     "keywords": ["cakephp","oauth","auth","extauth"],
     "homepage": "https://github.com/sc0ttyd/ExtAuth",
+    "time": "2013-06-14 00:45:00",
     "license": "MIT",
     "authors": [
         {
             "name": "Scott Donnelly",
-            "homepage": "http://scott.donnel.ly"
+            "homepage": "http://scott.donnel.ly",
+            "role": "Developer"
         }
     ],
     "repositories": [
@@ -37,6 +40,8 @@
         }
     ],
     "require": {
+        "php": ">=5.3.0",
+        "composer/installers": "*",
         "googlecode/OAuth": "*"
     }
 }
