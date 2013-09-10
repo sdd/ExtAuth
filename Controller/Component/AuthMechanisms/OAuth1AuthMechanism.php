@@ -1,8 +1,5 @@
 <?php
 
-// imported code from https://code.google.com/p/oauth/source/browse/#svn%2Fcode%2Fphp
-App::import("Vendor", "ExtAuth.OAuth/OAuth");
-
 require_once('OAuthAuthMechanism.php');
 
 class OAuth1AuthMechanism extends OAuthAuthMechanism {
@@ -87,9 +84,9 @@ class OAuth1AuthMechanism extends OAuthAuthMechanism {
 	public function apiRequest($provider, $url, $token = null, $parameters = array(), $method = 'GET', $headers = array()) {
 		//TODO: headers
 
-		$consumer = new OAuthConsumer($provider->key, $provider->secret);
+		$consumer = new Eher\OAuth\Consumer($provider->key, $provider->secret);
 
-		$request = OAuthRequest::from_consumer_and_token(
+		$request = Eher\OAuth\Request::from_consumer_and_token(
 			$consumer,
 			$token,
 			$method,
@@ -97,7 +94,7 @@ class OAuth1AuthMechanism extends OAuthAuthMechanism {
 			$parameters
 		);
 
-		$request->sign_request(new OAuthSignatureMethod_HMAC_SHA1(), $consumer, $token);
+		$request->sign_request(new Eher\OAuth\HmacSha1(), $consumer, $token);
 
 		switch ($method) {
 			case 'POST':
