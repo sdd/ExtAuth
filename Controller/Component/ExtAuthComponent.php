@@ -47,7 +47,7 @@ class ExtAuthComponent extends Component {
 		$this->settings = array_merge($this->settings, array(
 
 			// Default Settings
-			'callbackURL'                   => Router::url('/', true).'/auth_callback/{PROVIDER}',
+			'callbackURL'                   => Router::url('/', true).'auth_callback/{PROVIDER}',
 			'sessionVariableRequestToken'   => 'request_token',
 			'sessionVariableAccessToken'    => 'access_token',
 
